@@ -1,0 +1,2 @@
+OpenGL
+g++ -o example example.cpp -lglut -lGLU -lGL -lm
