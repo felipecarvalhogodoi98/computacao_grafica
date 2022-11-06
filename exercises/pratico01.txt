@@ -1,0 +1,2 @@
+Ambiente de desenvolvimento
+  WSL -> Linux Ubuntu-20.04
