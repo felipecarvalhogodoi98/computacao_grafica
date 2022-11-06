@@ -64,6 +64,7 @@ void RenderScene(void) {
     glVertex3f(0.4f,0.0f,0.4f);
     glVertex3f(0.4f,0.2f,0.4f);
   glEnd(); 
+      glColor3f(1.0f,0.9f,1.0f);
   glBegin( GL_TRIANGLES ); 
     glVertex3f(0.0f,0.2f,0.4f);
     glVertex3f(0.2f,0.3f,0.4f);
@@ -75,8 +76,8 @@ void RenderScene(void) {
 
   if(open){
     glTranslatef(0.15f,0.0f,0.4f);
-    glRotatef(-65.0f, 0.0f,1.0f, 0.0f);
-    glBegin( GL_QUADS ); 
+    glRotatef(-65.0f, 0.0f,1.0f, 0.0f); 
+    glBegin( GL_QUADS );
       glVertex3f(0.0f,0.0f,0.0f);
       glVertex3f(0.0f,0.175f,0.0f);
       glVertex3f(0.1f,0.175f,0.0f);
@@ -90,9 +91,7 @@ void RenderScene(void) {
       glVertex3f(0.25f,0.0f,0.4f);
     glEnd();
   }
-  
-  
-  
+
   glPopMatrix();
   glFlush(); 
 } 
