@@ -1,8 +1,12 @@
 #include <GL/glut.h>
+#include <stdio.h>
 
 GLint open = 0;
+double asp=1;
+GLfloat fovy = 30.0;
+
   
-void RenderScene(void) { 
+void RenderScene(void) {
   glClearColor(0.0f,0.0f,0.0f,0.0f); 
   glClear( GL_COLOR_BUFFER_BIT ); 
   glBegin( GL_LINES ); 
@@ -91,21 +95,24 @@ void RenderScene(void) {
       glVertex3f(0.25f,0.0f,0.4f);
     glEnd();
   }
-
   glPopMatrix();
+
   glFlush(); 
 } 
   
-void ChangeSize(GLsizei width,GLsizei height) { 
-  glViewport(0,0,width,height); 
+void ChangeSize(GLsizei w,GLsizei h) {
+  asp = w/h;
+  glViewport(0,0,w,h); 
   glMatrixMode( GL_PROJECTION ); 
   glLoadIdentity(); 
-  gluPerspective(30.0,width/height,1.0,10.0); 
+  gluPerspective(fovy,asp,0.0,10.0); 
   glMatrixMode( GL_MODELVIEW ); 
-  glLoadIdentity(); 
+
   glTranslatef(0.0f,0.0f,-3.0f); 
   glRotatef(30.0f,1.0f,0.0f,0.0f); 
-  glRotatef(-45.0f,0.0f,1.0f,0.0f); 
+  glRotatef(-45.0f,0.0f,1.0f,0.0f);
+
+
 } 
 
 void MouseOptions(int button, int state, int x, int y)
@@ -121,16 +128,30 @@ void MouseOptions(int button, int state, int x, int y)
          
     glutPostRedisplay();
 }
+
+void KeyboardFunc(unsigned char key, int x, int y) {
+  printf("%c\n", key);
+  if(key == 'p'){
+    fovy += 1.0;
+  }
+
+  glMatrixMode( GL_PROJECTION ); 
+  glLoadIdentity(); 
+  gluPerspective(fovy,asp,0.0,10.0); 
+
+  glutPostRedisplay();
+}
   
 int main(int argc, char* argv[]) { 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
   glutInitWindowSize (500, 500); 
   glutInitWindowPosition (100, 100); 
-  glutCreateWindow("OpenGL - House"); 
+  glutCreateWindow("OpenGL - Pratico02"); 
   glutDisplayFunc(RenderScene);
   glutReshapeFunc(ChangeSize);
   glutMouseFunc(MouseOptions);
+  glutKeyboardFunc(KeyboardFunc);
   glutMainLoop(); 
   return 0;
 } 

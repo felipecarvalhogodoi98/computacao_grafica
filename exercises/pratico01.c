@@ -328,7 +328,7 @@ int main(int argc, char* argv[]) {
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
   glutInitWindowSize (500, 500); 
   glutInitWindowPosition (100, 100); 
-  glutCreateWindow("OpenGL - Poligonos");   
+  glutCreateWindow("OpenGL - Pratico01");   
   glutDisplayFunc(RenderScene);
   glutReshapeFunc(ChangeSize);
   glutKeyboardFunc(KeyboardFunc);
