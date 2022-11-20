@@ -1,10 +1,21 @@
 #include <GL/glut.h>
 #include <stdio.h>
+#include <math.h>
+
+const double DISTANCE = 3.0;
+const double PI = 3.14;
 
 GLint open = 0;
-double asp=1;
+double asp = 1.0;
+
 GLfloat fovy = 30.0;
 
+GLint camAngleX = 224;
+GLint camAngleY = -29;
+
+GLfloat eyex = 0;
+GLfloat eyey = 0;
+GLfloat eyez = 0;
   
 void RenderScene(void) {
   glClearColor(0.0f,0.0f,0.0f,0.0f); 
@@ -99,20 +110,25 @@ void RenderScene(void) {
 
   glFlush(); 
 } 
-  
-void ChangeSize(GLsizei w,GLsizei h) {
-  asp = w/h;
-  glViewport(0,0,w,h); 
+
+void movement() {
   glMatrixMode( GL_PROJECTION ); 
   glLoadIdentity(); 
-  gluPerspective(fovy,asp,0.0,10.0); 
+  gluPerspective(fovy,asp,1.0,10.0); 
+ 
   glMatrixMode( GL_MODELVIEW ); 
+  glLoadIdentity(); 
+  gluLookAt(eyex, eyey, eyez,
+            0.0, 0.0, 0.0,
+            0.0, 2.0, 0.0
+  );
+}
+  
+void ChangeSize(GLsizei w,GLsizei h) {
+  asp = (double) w/ (double) h;
+  glViewport(0,0,w,h); 
 
-  glTranslatef(0.0f,0.0f,-3.0f); 
-  glRotatef(30.0f,1.0f,0.0f,0.0f); 
-  glRotatef(-45.0f,0.0f,1.0f,0.0f);
-
-
+  movement();
 } 
 
 void MouseOptions(int button, int state, int x, int y)
@@ -126,7 +142,7 @@ void MouseOptions(int button, int state, int x, int y)
     RenderScene(); 
   } 
          
-    glutPostRedisplay();
+  glutPostRedisplay();
 }
 
 void KeyboardFunc(unsigned char key, int x, int y) {
@@ -134,15 +150,46 @@ void KeyboardFunc(unsigned char key, int x, int y) {
   if(key == 'p'){
     fovy += 1.0;
   }
+  if(key == 'o'){
+    fovy -= 1.0;
+  }
+  
+  movement();
 
-  glMatrixMode( GL_PROJECTION ); 
-  glLoadIdentity(); 
-  gluPerspective(fovy,asp,0.0,10.0); 
+  glutPostRedisplay();
+}
+
+void SpecialFunc(int key, int x, int y) {
+  switch (key) {
+    case GLUT_KEY_UP:
+      camAngleY += 1;
+      break;
+    case GLUT_KEY_DOWN:
+      camAngleY -= 1;
+      break;
+    case GLUT_KEY_LEFT:
+      camAngleX -= 1;
+      break;
+    case GLUT_KEY_RIGHT:
+      camAngleX += 1;
+
+      break;
+  }
+
+  eyex = DISTANCE * -sinf(camAngleX*(PI/180)) * cosf((camAngleY)*(PI/180));
+  eyey = DISTANCE * -sinf((camAngleY)*(PI/180));
+  eyez = -DISTANCE * cosf((camAngleX)*(PI/180)) * cosf((camAngleY)*(PI/180));
+
+  movement();
 
   glutPostRedisplay();
 }
   
-int main(int argc, char* argv[]) { 
+int main(int argc, char* argv[]) {
+  eyex = DISTANCE * -sinf(camAngleX*(PI/180)) * cosf((camAngleY)*(PI/180));
+  eyey = DISTANCE * -sinf((camAngleY)*(PI/180));
+  eyez = -DISTANCE * cosf((camAngleX)*(PI/180)) * cosf((camAngleY)*(PI/180));
+
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
   glutInitWindowSize (500, 500); 
@@ -152,6 +199,7 @@ int main(int argc, char* argv[]) {
   glutReshapeFunc(ChangeSize);
   glutMouseFunc(MouseOptions);
   glutKeyboardFunc(KeyboardFunc);
+  glutSpecialFunc(SpecialFunc);
   glutMainLoop(); 
   return 0;
 } 
