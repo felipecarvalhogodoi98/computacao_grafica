@@ -1,2 +1,2 @@
 OpenGL
-gcc -o example example.c -lglut -lGLU -lGL -lm
+gcc -o pratico01 pratico01.c -lglut -lGLU -lGL -lm
